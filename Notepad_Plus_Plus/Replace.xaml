@@ -36,20 +36,20 @@
                  Height="25"
                  Width="300"
                  />
-        <Button x:Name="Replace"
+        <Button x:Name="ReplaceButon"
                 Grid.Row="5"
                 Height="35"
                 Width="120"
                 Content="Replace"
-                FontSize="20" Margin="276,42,404,42"
+                FontSize="15" Margin="276,42,404,42"
                 Click="ReplaceWord"
                 />
-        <Button x:Name="ReplaceAll"
+        <Button x:Name="ReplaceAllButton"
                 Grid.Row="5"
                 Height="35"
                 Width="120"
                 Content="Replace All"
-                FontSize="20" Margin="428,42,252,42"
+                FontSize="15" Margin="428,42,252,42"
                 Click="ReplaceAll"
                 />
     </Grid>

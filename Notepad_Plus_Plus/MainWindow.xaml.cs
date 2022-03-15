@@ -378,8 +378,22 @@ namespace Notepad_Plus_Plus
 
         private void Replace(object sender, RoutedEventArgs e)
         {
-            Replace r=new Replace();
-            r.Show();
+            int index=TextTabs.SelectedIndex;
+            if (index != -1)
+            {
+                TabItem tabItem = TextTabs.SelectedItem as TabItem;
+                TextBox textBox = tabItem.Content as TextBox;
+                string content=textBox.Text;
+                Replace r = new Replace(content,this);
+                r.Show();
+            }
+        }
+
+        public void setTextBoxContent(string text)
+        {
+            TabItem tabItem = TextTabs.SelectedItem as TabItem;
+            TextBox textBox = tabItem.Content as TextBox;
+            textBox.Text = text;
         }
     }
 }
