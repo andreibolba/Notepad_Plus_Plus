@@ -246,11 +246,9 @@ namespace Notepad_Plus_Plus
         {
             int index = TextTabs.SelectedIndex;
             TabItem tabItem = TextTabs.Items[index] as TabItem;
-            TextBox textBox= TextTabs.Items[index] as TextBox;
+            TextBox textBox= tabItem.Content as TextBox;
             string content = (tabItem.Content as TextBox).Text.ToString();
             content=content.Remove(caretPosition, text.Length);
-            textBox = new TextBox();
-            textBox.SelectionChanged += TextBox_SelectionChanged;
             textBox.Text = content;
             tabItem.Content = textBox;
         }
@@ -302,14 +300,11 @@ namespace Notepad_Plus_Plus
             if (index != -1)
             {
                 TabItem tabItem = TextTabs.Items[index] as TabItem;
-                TextBox textBox = TextTabs.Items[index] as TextBox;
+                TextBox textBox = tabItem.Content as TextBox;
                 string content = (tabItem.Content as TextBox).Text.ToString();
                 string newText = text.ToUpper();
                 content = content.Remove(caretPosition, text.Length);
                 content = content.Insert(caretPosition, newText);
-                textBox = new TextBox();
-                textBox.SelectionChanged += TextBox_SelectionChanged;
-                textBox.TextChanged += Content_TextChanged;
                 textBox.Text = content;
                 tabItem.Content = textBox;
             }
@@ -325,14 +320,11 @@ namespace Notepad_Plus_Plus
             if (index != -1)
             {
                 TabItem tabItem = TextTabs.Items[index] as TabItem;
-                TextBox textBox = TextTabs.Items[index] as TextBox;
+                TextBox textBox = tabItem.Content as TextBox;
                 string content = (tabItem.Content as TextBox).Text.ToString();
                 string newText = text.ToLower();
                 content = content.Remove(caretPosition, text.Length);
                 content = content.Insert(caretPosition, newText);
-                textBox = new TextBox();
-                textBox.SelectionChanged += TextBox_SelectionChanged;
-                textBox.TextChanged += Content_TextChanged;
                 textBox.Text = content;
                 tabItem.Content = textBox;
             }
@@ -347,13 +339,30 @@ namespace Notepad_Plus_Plus
             int index = TextTabs.SelectedIndex;
             if (index != -1)
             {
-                /*TabItem tabItem = TextTabs.Items[index] as TabItem;
-                TextBox textBox = TextTabs.Items[index] as TextBox;
+                TabItem tabItem = TextTabs.Items[index] as TabItem;
+                TextBox textBox = tabItem.Content as TextBox;
+                string newContent=null;
                 string content = (tabItem.Content as TextBox).Text.ToString();
-                var array = textBox.Text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-                textBox = new TextBox();
-                textBox.SelectionChanged += TextBox_SelectionChanged;
-                textBox.Text = array.ToString();*/
+                int line = textBox.LineCount;
+                for(int i=0;i<line;i++)
+                {
+                    bool blank = true;
+                    string text=textBox.GetLineText(i);
+
+                    for (int j = 0; j < text.Length; j++)
+                    {
+                        if (text[j]>=33&&text[j]<=126)
+                        {
+                            blank = false;
+                        }
+                    }
+                    if (blank==false)
+                        newContent += text;
+                    
+                }
+                textBox.Text = newContent;
+                tabItem.Content = textBox;
+                //MessageBox.Show(newContent);
             }
             else
             {
