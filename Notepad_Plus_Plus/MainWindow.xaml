@@ -67,7 +67,7 @@
                 <MenuItem Header="Linkedin"
                           Click="Linkedin"/>
                 <MenuItem Header="Author"
-                          Click="MenuItem_Click"/>
+                          Click="Author"/>
             </MenuItem>
         </Menu>
 

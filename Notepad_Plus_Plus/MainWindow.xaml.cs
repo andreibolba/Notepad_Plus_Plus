@@ -359,7 +359,6 @@ namespace Notepad_Plus_Plus
                 }
                 textBox.Text = newContent;
                 tabItem.Content = textBox;
-                //MessageBox.Show(newContent);
             }
             else
             {
@@ -369,17 +368,16 @@ namespace Notepad_Plus_Plus
 
         private void Linkedin(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-
+            System.Diagnostics.Process.Start("https://www.linkedin.com/in/bolba-mateescu-andrei/");
         }
 
         private void Find(object sender, RoutedEventArgs e)
         {
-            
+            TabItem tabItem = TextTabs.SelectedItem as TabItem;
+            TextBox textBox = tabItem.Content as TextBox;
+            string content = textBox.Text;
+            Find find = new Find(content, this);
+            find.Show();
         }
 
         private void Replace(object sender, RoutedEventArgs e)
@@ -390,8 +388,8 @@ namespace Notepad_Plus_Plus
                 TabItem tabItem = TextTabs.SelectedItem as TabItem;
                 TextBox textBox = tabItem.Content as TextBox;
                 string content=textBox.Text;
-                Replace r = new Replace(content,this);
-                r.Show();
+                Replace replace = new Replace(content,this);
+                replace.Show();
             }
         }
 
@@ -400,6 +398,12 @@ namespace Notepad_Plus_Plus
             TabItem tabItem = TextTabs.SelectedItem as TabItem;
             TextBox textBox = tabItem.Content as TextBox;
             textBox.Text = text;
+        }
+
+        private void Author(object sender, RoutedEventArgs e)
+        {
+            Author author = new Author();
+            author.Show();
         }
     }
 }
