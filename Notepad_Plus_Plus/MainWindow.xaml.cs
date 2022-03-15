@@ -74,6 +74,7 @@ namespace Notepad_Plus_Plus
         private void SaveAll(object sender, RoutedEventArgs e)
         {
             int tabsCount=TextTabs.Items.Count;
+            string title = null;
             if (tabsCount > 0)
             {
                 for (int i = 0; i < tabsCount; i++)
@@ -92,13 +93,10 @@ namespace Notepad_Plus_Plus
                         if (dialog.ShowDialog() == true)
                         {
                             File.WriteAllText(dialog.FileName, data);
+                            title = dialog.FileName;
                         }
                     }
-                    string title = tabItem.Header.ToString();
-                    tabItem.Header = title;
-                    string newTitle = null;
-                    for (int j = 0; j < title.Length - 1; j++)
-                        newTitle += title[j];
+                    string newTitle = fileName(title);
                     tabItem.Header = newTitle;
                 }
             }
@@ -111,10 +109,12 @@ namespace Notepad_Plus_Plus
         private void SaveFile(object sender, RoutedEventArgs e)
         {
             int index=TextTabs.SelectedIndex;
+            string title=null;
             if (index != -1)
             {
                 var tabItem = TextTabs.SelectedItem as TabItem;
                 var data = (tabItem.Content as TextBox).Text;
+                
                 if (data == null)
                     MessageBox.Show("Empty File");
                 else
@@ -127,13 +127,10 @@ namespace Notepad_Plus_Plus
                     if (dialog.ShowDialog() == true)
                     {
                         File.WriteAllText(dialog.FileName, data);
+                        title=dialog.FileName;
                     }
                 }
-                string title = tabItem.Header.ToString();
-                tabItem.Header = title;
-                string newTitle = null;
-                for (int i = 0; i < title.Length - 1; i++)
-                    newTitle += title[i];
+                string newTitle = fileName(title);
                 tabItem.Header = newTitle;
             }
             else
@@ -263,10 +260,10 @@ namespace Notepad_Plus_Plus
 
         private void SelectAll(object sender, RoutedEventArgs e)
         {
-            /*int index = TextTabs.SelectedIndex;
+            int index = TextTabs.SelectedIndex;
             TabItem tabItem = TextTabs.Items[index] as TabItem;
-            TextBox textBox = TextTabs.Items[index] as TextBox;
-            textBox.SelectAll();*/
+            TextBox textBox = tabItem.Content as TextBox;
+            textBox.SelectAll();
         }
 
         private void Paste(object sender, RoutedEventArgs e)
