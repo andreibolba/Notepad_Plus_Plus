@@ -22,12 +22,14 @@
                  Grid.Row="2"
                  Height="25"
                  Width="300"
+                 TextChanged="WordInput_TextChanged"
                  />
         <Button x:Name="FindPrevious"
                 Grid.Row="3"
                 Content="Find Previous"
                 FontSize="15" Margin="325,62,320,77"
                 Click="FindPrevious_Click"
+                
                 />
         <Button x:Name="FindAll"
                 Grid.Row="3"

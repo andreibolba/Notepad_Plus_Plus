@@ -46,8 +46,8 @@ namespace Notepad_Plus_Plus
         {
             replacingWord = WordInput.Text;
             replacedWord = WordReplace.Text;
-            int caret = firstWordPosition(content, replacingWord);
-            if (caret == -1)
+            int caret = firstWordPosition(text, replacingWord);
+            if (caret != -1)
             {
                 content = content.Replace(replacingWord, replacedWord);
                 mainWindow.setTextBoxContent(content);

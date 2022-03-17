@@ -376,7 +376,7 @@ namespace Notepad_Plus_Plus
             TabItem tabItem = TextTabs.SelectedItem as TabItem;
             TextBox textBox = tabItem.Content as TextBox;
             string content = textBox.Text;
-            Find find = new Find(content, this);
+            Find find = new Find(content, this,textBox);
             find.Show();
         }
 
@@ -387,7 +387,7 @@ namespace Notepad_Plus_Plus
             {
                 TabItem tabItem = TextTabs.SelectedItem as TabItem;
                 TextBox textBox = tabItem.Content as TextBox;
-                string content=textBox.Text;
+                string content = textBox.Text;
                 Replace replace = new Replace(content,this);
                 replace.Show();
             }
@@ -398,6 +398,15 @@ namespace Notepad_Plus_Plus
             TabItem tabItem = TextTabs.SelectedItem as TabItem;
             TextBox textBox = tabItem.Content as TextBox;
             textBox.Text = text;
+        }
+
+        public void setTextBox(TextBox textBoxUpdate)
+        {
+            TabItem tabItem = TextTabs.SelectedItem as TabItem;
+            TextBox textBox = tabItem.Content as TextBox;
+            textBox = textBoxUpdate;
+            tabItem.Content = textBox;
+            
         }
 
         private void Author(object sender, RoutedEventArgs e)

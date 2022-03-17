@@ -58,7 +58,6 @@
             <MenuItem Header="Search">
                 <MenuItem Header="Find"
                           Click="Find"/>
-                <MenuItem Header="Find next"/>
                 <Separator/>
                 <MenuItem Header="Replace"
                           Click="Replace"/>

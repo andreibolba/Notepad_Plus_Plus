@@ -20,39 +20,63 @@ namespace Notepad_Plus_Plus
     public partial class Find : Window
     {
         private List<int> words;
+        private int index;
         private string text;
+        private string replacingWord;
+        private string replacedWord;
+        MainWindow mainWindow;
+        TextBox textBox;
+
         public string content
         {
             get { return text; }
             set { text = value; }
         }
 
-        MainWindow mainWindow;
-
-        private string replacingWord;
-        private string replacedWord;
         public Find()
         {
             InitializeComponent();
             words = new List<int>();
+            index = 0;
         }
 
-        public Find(string content, MainWindow main)
+        public Find(string content, MainWindow main,TextBox textBox)
         {
             InitializeComponent();
             this.content = content;
             this.mainWindow = main;
             words = new List<int>();
+            index = 0;
+            this.textBox = textBox;
         }
 
         private void FindPrevious_Click(object sender, RoutedEventArgs e)
         {
-
+            if (index == 0)
+            {
+                MessageBox.Show("Last word found in this file");
+            }
+            else
+            {
+                textBox.Select(words[index], WordInput.Text.Length);
+                index--;
+                mainWindow.setTextBox(textBox);
+            }
         }
 
         private void FindNext_Click(object sender, RoutedEventArgs e)
         {
+            if(index==words.Count)
+            {
+                MessageBox.Show("Last word found in this file");
+                index--;
+            }
+            else {
 
+          
+                index++;
+                mainWindow.setTextBox(textBox);
+            }
         }
 
         private List<int> getDictionary(string text,string word)
@@ -72,10 +96,13 @@ namespace Notepad_Plus_Plus
 
         private void FindAll_Click(object sender, RoutedEventArgs e)
         {
-            string wordToFind = WordInput.Text;
-            words=getDictionary(text,wordToFind);
-            MessageBox.Show(words.Count.ToString());
 
+        }
+
+        private void WordInput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string wordToFind = WordInput.Text;
+            words = getDictionary(text, wordToFind);
         }
     }
 }
