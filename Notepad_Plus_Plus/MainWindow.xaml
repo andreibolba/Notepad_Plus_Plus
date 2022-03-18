@@ -68,6 +68,10 @@
                 <MenuItem Header="Author"
                           Click="Author"/>
             </MenuItem>
+            <MenuItem Header="Reading">
+                <MenuItem Header="Set/unset readonly"
+                      Click="readOnly"/>
+            </MenuItem>
         </Menu>
 
         <TabControl
@@ -84,9 +88,10 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="240"/>
                 <ColumnDefinition Width="300"/>
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="400"/>
                 <ColumnDefinition Width="*"/>
@@ -94,11 +99,12 @@
             <Label Grid.Column="0" FontSize="18">Normal text file</Label>
             <Label x:Name="Lenght" Grid.Column="1" FontSize="18">Length: #</Label>
             <Label x:Name="Lines" Grid.Column="2" FontSize="18">Lines: #</Label>
-            <Label x:Name="Line" Grid.Column="3" FontSize="18">Line: #</Label>
-            <Label x:Name="Column" Grid.Column="4" FontSize="18">Column: #</Label>
-            <Label x:Name="Position" Grid.Column="5" FontSize="18">Position: #</Label>
-            <Label Grid.Column="6" FontSize="18">UTF-8</Label>
-            <Label Grid.Column="7" FontSize="18">INS</Label>
+            <Label x:Name="FileRead" Grid.Column="3" FontSize="18">Is not readonly!</Label>
+            <Label x:Name="Line" Grid.Column="4" FontSize="18">Line: #</Label>
+            <Label x:Name="Column" Grid.Column="5" FontSize="18">Column: #</Label>
+            <Label x:Name="Position" Grid.Column="6" FontSize="18">Position: #</Label>
+            <Label Grid.Column="7" FontSize="18">UTF-8</Label>
+            <Label Grid.Column="8" FontSize="18">INS</Label>
         </Grid>
     </Grid>
 </Window>

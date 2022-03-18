@@ -72,8 +72,6 @@ namespace Notepad_Plus_Plus
                 index--;
             }
             else {
-
-          
                 index++;
                 mainWindow.setTextBox(textBox);
             }

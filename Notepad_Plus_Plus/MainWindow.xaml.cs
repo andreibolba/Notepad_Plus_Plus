@@ -30,6 +30,7 @@ namespace Notepad_Plus_Plus
             Column.Content = "Column: 0";
             Lines.Content = "Lines: 0";
             Position.Content = "Position: 0";
+            FileRead.Content = "Is not readonly!";
         }
 
         private void Save(object sender, RoutedEventArgs e)
@@ -414,5 +415,22 @@ namespace Notepad_Plus_Plus
             Author author = new Author();
             author.Show();
         }
+
+        private void readOnly(object sender, RoutedEventArgs e)
+        {
+            int index = TextTabs.SelectedIndex;
+            TabItem tabItem = TextTabs.Items[index] as TabItem;
+            TextBox textBox = tabItem.Content as TextBox;
+            if (textBox.IsReadOnly == true)
+            {
+                textBox.IsReadOnly = false;
+                FileRead.Content = "Is not readonly!";
+            }
+            else
+            {
+                textBox.IsReadOnly = true;
+                FileRead.Content = "Is readonly!";
+            }
+            }
     }
 }
