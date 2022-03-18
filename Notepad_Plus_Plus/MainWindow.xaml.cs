@@ -372,6 +372,14 @@ namespace Notepad_Plus_Plus
             System.Diagnostics.Process.Start("https://www.linkedin.com/in/bolba-mateescu-andrei/");
         }
 
+        private void Facebook(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.facebook.com/andreibolbamateescu");
+        }
+        private void Instagram(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.instagram.com/andreibolba/");
+        }
         private void Find(object sender, RoutedEventArgs e)
         {
             TabItem tabItem = TextTabs.SelectedItem as TabItem;

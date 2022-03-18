@@ -65,6 +65,10 @@
             <MenuItem Header="About">
                 <MenuItem Header="Linkedin"
                           Click="Linkedin"/>
+                <MenuItem Header="Facebook"
+                          Click="Facebook"/>
+                <MenuItem Header="Instagram"
+                          Click="Instagram"/>
                 <MenuItem Header="Author"
                           Click="Author"/>
             </MenuItem>
