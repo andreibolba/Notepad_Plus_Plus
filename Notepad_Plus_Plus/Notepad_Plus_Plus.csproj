@@ -65,6 +65,9 @@
     <Compile Include="Find.xaml.cs">
       <DependentUpon>Find.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Line.xaml.cs">
+      <DependentUpon>Line.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Replace.xaml.cs">
       <DependentUpon>Replace.xaml</DependentUpon>
     </Compile>
@@ -73,6 +76,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Find.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Line.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

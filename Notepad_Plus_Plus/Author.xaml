@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Notepad_Plus_Plus"
         mc:Ignorable="d"
         Title="Author" Height="300" Width="430" 
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Icon="notes.png">
     <Grid>
         <Label Content="Nume:"
                FontSize="15" Margin="0,59,296,145"

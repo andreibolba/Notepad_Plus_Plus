@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Notepad_Plus_Plus"
         mc:Ignorable="d"
         Title="Replace" Height="450" Width="800"
-        Background="LightGray">
+        Icon="notes.png">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>

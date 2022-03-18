@@ -61,6 +61,8 @@
                 <Separator/>
                 <MenuItem Header="Replace"
                           Click="Replace"/>
+                <MenuItem Header="Go To Line"
+                          Click="goToLine"/>
             </MenuItem>
             <MenuItem Header="About">
                 <MenuItem Header="Linkedin"

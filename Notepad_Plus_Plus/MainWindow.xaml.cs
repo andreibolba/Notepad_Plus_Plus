@@ -439,6 +439,15 @@ namespace Notepad_Plus_Plus
                 textBox.IsReadOnly = true;
                 FileRead.Content = "Is readonly!";
             }
-            }
+        }
+
+        private void goToLine(object sender, RoutedEventArgs e)
+        {
+            int index = TextTabs.SelectedIndex;
+            TabItem tabItem = TextTabs.Items[index] as TabItem;
+            TextBox textBox = tabItem.Content as TextBox;
+            Line line=new Line(this,textBox);
+            line.Show();
+        }
     }
 }
