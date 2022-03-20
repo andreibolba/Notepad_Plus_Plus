@@ -62,6 +62,7 @@
     <Compile Include="Author.xaml.cs">
       <DependentUpon>Author.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Classes\Edit.cs" />
     <Compile Include="Find.xaml.cs">
       <DependentUpon>Find.xaml</DependentUpon>
     </Compile>
@@ -127,9 +128,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Classes\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="notes.png" />
   </ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using Notepad_Plus_Plus.Classes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,7 @@ namespace Notepad_Plus_Plus
         private string text;
         private int caretPosition;
         private int count;
+        private Edit edit;
         public MainWindow()
         {
             count = 1;
@@ -21,6 +23,7 @@ namespace Notepad_Plus_Plus
             initialize();
             filePath= new List<string>();
             clipboard= new List<string>();
+            edit=new Edit();
         }
 
         private void initialize()
@@ -140,6 +143,13 @@ namespace Notepad_Plus_Plus
             }
         }
 
+        private void TextBox_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            text = textBox.SelectedText;
+            caretPosition = textBox.SelectionStart;
+            edit.setSelectionChange(textBox.Text, text, caretPosition);
+        }
         private void Content_TextChanged(object sender, TextChangedEventArgs e)
         {
             var tabItem = TextTabs.SelectedItem as TabItem;
@@ -156,6 +166,7 @@ namespace Notepad_Plus_Plus
                 tabItem.Header = title;
                 
             }
+            edit.Content = textBox.Text;
         }
 
         private void NewFile(object sender, RoutedEventArgs e)
@@ -227,59 +238,40 @@ namespace Notepad_Plus_Plus
             }
         }
 
-
-
+        #region edit text
         private void Cut(object sender, RoutedEventArgs e)
         {
-            Copy(sender, e);
-            Delete(sender, e);
+            int index = TextTabs.SelectedIndex;
+            TabItem tabItem = TextTabs.Items[index] as TabItem;
+            TextBox textBox = tabItem.Content as TextBox;
+            string content = (tabItem.Content as TextBox).Text.ToString();
+            textBox.Text = edit.cut();
+            tabItem.Content = textBox;
         }
-
         private void Copy(object sender, RoutedEventArgs e)
         {
-            clipboard.Add(text);
+            edit.copy();
         }
-
         private void Delete(object sender, RoutedEventArgs e)
         {
             int index = TextTabs.SelectedIndex;
             TabItem tabItem = TextTabs.Items[index] as TabItem;
             TextBox textBox= tabItem.Content as TextBox;
             string content = (tabItem.Content as TextBox).Text.ToString();
-            content=content.Remove(caretPosition, text.Length);
-            textBox.Text = content;
+            textBox.Text = edit.delete();
             tabItem.Content = textBox;
         }
-
-        private void TextBox_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-            text = textBox.SelectedText;
-            caretPosition = textBox.SelectionStart;
-
-        }
-
-        private void SelectAll(object sender, RoutedEventArgs e)
-        {
-            int index = TextTabs.SelectedIndex;
-            TabItem tabItem = TextTabs.Items[index] as TabItem;
-            TextBox textBox = tabItem.Content as TextBox;
-            textBox.SelectAll();
-        }
-
         private void Paste(object sender, RoutedEventArgs e)
         {
-            int index=TextTabs.SelectedIndex;
+            int index = TextTabs.SelectedIndex;
             if (index != -1)
             {
-                if (clipboard.Count != 0)
+                if (edit.paste(caretPosition)!=null)
                 {
-                    string text = clipboard[clipboard.Count - 1];
                     TabItem tabItem = TextTabs.Items[index] as TabItem;
-                    TextBox textBox=tabItem.Content as TextBox;
-                    string textContent = textBox.Text.ToString();
-                    textContent=textContent.Insert(caretPosition, text);
-                    textBox.Text= textContent;
+                    TextBox textBox = tabItem.Content as TextBox;
+                    textBox.Text = edit.paste(caretPosition);
+                    tabItem.Content= textBox;
                 }
                 else
                 {
@@ -291,7 +283,21 @@ namespace Notepad_Plus_Plus
                 MessageBox.Show("You don't any file selected");
             }
         }
-
+        private void Lowercase(object sender, RoutedEventArgs e)
+        {
+            int index = TextTabs.SelectedIndex;
+            if (index != -1)
+            {
+                TabItem tabItem = TextTabs.Items[index] as TabItem;
+                TextBox textBox = tabItem.Content as TextBox;
+                textBox.Text = edit.capsLock(caretPosition,1);
+                tabItem.Content = textBox;
+            }
+            else
+            {
+                MessageBox.Show("You don't any file selected");
+            }
+        }
         private void Uppercase(object sender, RoutedEventArgs e)
         {
             int index = TextTabs.SelectedIndex;
@@ -300,10 +306,7 @@ namespace Notepad_Plus_Plus
                 TabItem tabItem = TextTabs.Items[index] as TabItem;
                 TextBox textBox = tabItem.Content as TextBox;
                 string content = (tabItem.Content as TextBox).Text.ToString();
-                string newText = text.ToUpper();
-                content = content.Remove(caretPosition, text.Length);
-                content = content.Insert(caretPosition, newText);
-                textBox.Text = content;
+                textBox.Text = edit.capsLock(caretPosition,2);
                 tabItem.Content = textBox;
             }
             else
@@ -311,27 +314,6 @@ namespace Notepad_Plus_Plus
                 MessageBox.Show("You don't any file selected");
             }
         }
-
-        private void Lowercase(object sender, RoutedEventArgs e)
-        {
-            int index = TextTabs.SelectedIndex;
-            if (index != -1)
-            {
-                TabItem tabItem = TextTabs.Items[index] as TabItem;
-                TextBox textBox = tabItem.Content as TextBox;
-                string content = (tabItem.Content as TextBox).Text.ToString();
-                string newText = text.ToLower();
-                content = content.Remove(caretPosition, text.Length);
-                content = content.Insert(caretPosition, newText);
-                textBox.Text = content;
-                tabItem.Content = textBox;
-            }
-            else
-            {
-                MessageBox.Show("You don't any file selected");
-            }
-        }
-
         private void RemoveLines(object sender, RoutedEventArgs e)
         {
             int index = TextTabs.SelectedIndex;
@@ -339,24 +321,24 @@ namespace Notepad_Plus_Plus
             {
                 TabItem tabItem = TextTabs.Items[index] as TabItem;
                 TextBox textBox = tabItem.Content as TextBox;
-                string newContent=null;
+                string newContent = null;
                 string content = (tabItem.Content as TextBox).Text.ToString();
                 int line = textBox.LineCount;
-                for(int i=0;i<line;i++)
+                for (int i = 0; i < line; i++)
                 {
                     bool blank = true;
-                    string text=textBox.GetLineText(i);
+                    string text = textBox.GetLineText(i);
 
                     for (int j = 0; j < text.Length; j++)
                     {
-                        if (text[j]>=33&&text[j]<=126)
+                        if (text[j] >= 33 && text[j] <= 126)
                         {
                             blank = false;
                         }
                     }
-                    if (blank==false)
+                    if (blank == false)
                         newContent += text;
-                    
+
                 }
                 textBox.Text = newContent;
                 tabItem.Content = textBox;
@@ -366,12 +348,23 @@ namespace Notepad_Plus_Plus
                 MessageBox.Show("You don't any file selected");
             }
         }
+        #endregion
 
+
+        private void SelectAll(object sender, RoutedEventArgs e)
+        {
+            int index = TextTabs.SelectedIndex;
+            TabItem tabItem = TextTabs.Items[index] as TabItem;
+            TextBox textBox = tabItem.Content as TextBox;
+            textBox.SelectAll();
+        }
+
+
+        #region social
         private void Linkedin(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://www.linkedin.com/in/bolba-mateescu-andrei/");
         }
-
         private void Facebook(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://www.facebook.com/andreibolbamateescu");
@@ -380,6 +373,13 @@ namespace Notepad_Plus_Plus
         {
             System.Diagnostics.Process.Start("https://www.instagram.com/andreibolba/");
         }
+        private void Author(object sender, RoutedEventArgs e)
+        {
+            Author author = new Author();
+            author.Show();
+        }
+        #endregion
+
         private void Find(object sender, RoutedEventArgs e)
         {
             TabItem tabItem = TextTabs.SelectedItem as TabItem;
@@ -415,14 +415,9 @@ namespace Notepad_Plus_Plus
             TextBox textBox = tabItem.Content as TextBox;
             textBox = textBoxUpdate;
             tabItem.Content = textBox;
-            
         }
 
-        private void Author(object sender, RoutedEventArgs e)
-        {
-            Author author = new Author();
-            author.Show();
-        }
+        
 
         private void readOnly(object sender, RoutedEventArgs e)
         {
