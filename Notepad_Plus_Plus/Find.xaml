@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Notepad_Plus_Plus"
         mc:Ignorable="d"
         Title="Find" Height="420" Width="800"
-        Icon="notes.png">
+        Icon="notes.png"
+        Closing="Window_Closing">
     <Grid Margin="0,0,0,-6">
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>
