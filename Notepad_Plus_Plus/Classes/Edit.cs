@@ -9,6 +9,7 @@ namespace Notepad_Plus_Plus.Classes
 {
     internal class Edit
     {
+        #region variables and constructor
         private string copyText;
         private string content;
         private int caret;
@@ -34,35 +35,30 @@ namespace Notepad_Plus_Plus.Classes
         {
             copyText = null;
         }
-
+        #endregion
         public void setSelectionChange(string text, string selectText, int caret)
         {
             this.Content = text;
             this.caret = caret;
             this.selection = selectText;
         }
-
-        public string delete()
-        {
-            return content.Remove(caret, selection.Length);
-        }
-
         public void copy()
         {
             copyText = selection;
         }
-
         public string cut()
         {
             copy();
             return delete();
         }
-
         public string paste(int caret)
         {
             return content.Insert(caret, copyText);
         }
-
+        public string delete()
+        {
+            return content.Remove(caret, selection.Length);
+        }
         public string capsLock(int caret,int op)
         {
             content = delete();
