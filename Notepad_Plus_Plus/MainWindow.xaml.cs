@@ -11,21 +11,18 @@ namespace Notepad_Plus_Plus
     public partial class MainWindow : Window
     {
         #region variables and constructor
-        private List<string> filePath;
         private string text;
         private int caretPosition;
-        private int count;
         private Edit edit;
         private Utils utils;
+        private FileAction fileAction;
         public MainWindow()
         {
-            count = 1;
             InitializeComponent();
             initialize();
-            filePath = new List<string>();
             edit = new Edit();
             utils = new Utils();
-            
+            fileAction = new FileAction();
         }
 
         private void initialize()
@@ -39,21 +36,26 @@ namespace Notepad_Plus_Plus
         }
         #endregion
 
+        #region utils
+
+        void setChanges()
+        {
+            int count=TextTabs.Items.Count;
+            TabItem tabItem=TextTabs.Items[count-1] as TabItem;
+            TextBox textBox=tabItem.Content as TextBox;
+            textBox.TextChanged += Content_TextChanged;
+            tabItem.Content = textBox;
+        }
+
+        #endregion
+
         #region file action
         private void NewFile(object sender, RoutedEventArgs e)
         {
-            TabItem tabItem = new TabItem();
-            TextBox textBox = new TextBox();
-            textBox.AcceptsReturn = true;
-            textBox.AcceptsTab = true;
-            textBox.TextChanged += Content_TextChanged;
-            textBox.SelectionChanged += TextBox_SelectionChanged;
-            tabItem.Header = "new " + count.ToString();
-            count++;
-            tabItem.Content = textBox;
-            filePath.Add(null);
-            TextTabs.Items.Add(tabItem);
+            TextTabs.Items.Add(fileAction.newFile());
+            setChanges();
         }
+
         private void OpenFile(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -62,17 +64,8 @@ namespace Notepad_Plus_Plus
             {
                 foreach (string FileToOpen in openFileDialog.FileNames)
                 {
-                    TabItem it = new TabItem();
-                    TextBox txt = new TextBox();
-                    txt.AcceptsReturn = true;
-                    txt.AcceptsTab = true;
-                    txt.Text = File.ReadAllText(FileToOpen);
-                    txt.TextChanged += Content_TextChanged;
-                    txt.SelectionChanged += TextBox_SelectionChanged;
-                    it.Header = utils.fileName(FileToOpen);
-                    filePath.Add(FileToOpen);
-                    it.Content = txt;
-                    TextTabs.Items.Add(it);
+                    TextTabs.Items.Add(fileAction.openFile(utils.fileName(FileToOpen), File.ReadAllText(FileToOpen),FileToOpen));
+                    setChanges();
                 }
             }
         }
@@ -81,28 +74,9 @@ namespace Notepad_Plus_Plus
             int i = TextTabs.SelectedIndex;
             if (i != -1)
             {
-                int index = TextTabs.SelectedIndex;
-                TabItem tabItem = TextTabs.Items[index] as TabItem;
-                var data = (tabItem.Content as TextBox).Text;
-                if (filePath[index] != null)
-                {
-                    File.WriteAllText(filePath[index], data);
-
-                }
-                else
-                {
-                    SaveFileDialog dialog = new SaveFileDialog()
-                    {
-                        Filter = "Text Files(*.txt)|*.txt|All(*.*)|*"
-                    };
-
-                    if (dialog.ShowDialog() == true)
-                    {
-                        File.WriteAllText(dialog.FileName, data);
-                        filePath[index] = dialog.FileName;
-                    }
-                }
-                string title = utils.fileName(filePath[index]);
+                TabItem tabItem = TextTabs.Items[i] as TabItem;
+                string data = (tabItem.Content as TextBox).Text.ToString();
+                string title = utils.fileName(fileAction.save(i,data));
                 tabItem.Header = title;
             }
             else
@@ -113,28 +87,11 @@ namespace Notepad_Plus_Plus
         private void SaveFile(object sender, RoutedEventArgs e)
         {
             int index = TextTabs.SelectedIndex;
-            string title = null;
             if (index != -1)
             {
-                var tabItem = TextTabs.SelectedItem as TabItem;
-                var data = (tabItem.Content as TextBox).Text;
-
-                if (data == null)
-                    MessageBox.Show("Empty File");
-                else
-                {
-                    SaveFileDialog dialog = new SaveFileDialog()
-                    {
-                        Filter = "Text Files(*.txt)|*.txt|All(*.*)|*"
-                    };
-
-                    if (dialog.ShowDialog() == true)
-                    {
-                        File.WriteAllText(dialog.FileName, data);
-                        title = dialog.FileName;
-                    }
-                }
-                string newTitle = utils.fileName(title);
+                TabItem tabItem = TextTabs.SelectedItem as TabItem;
+                string data = (tabItem.Content as TextBox).Text.ToString();
+                string newTitle = utils.fileName(fileAction.saveFile(index,data));
                 tabItem.Header = newTitle;
             }
             else
@@ -145,29 +102,13 @@ namespace Notepad_Plus_Plus
         private void SaveAll(object sender, RoutedEventArgs e)
         {
             int tabsCount = TextTabs.Items.Count;
-            string title = null;
             if (tabsCount > 0)
             {
                 for (int i = 0; i < tabsCount; i++)
                 {
                     TabItem tabItem = TextTabs.Items[i] as TabItem;
-                    var data = (tabItem.Content as TextBox).Text;
-                    if (data == null)
-                        MessageBox.Show("Empty File");
-                    else
-                    {
-                        SaveFileDialog dialog = new SaveFileDialog()
-                        {
-                            Filter = "Text Files(*.txt)|*.txt|All(*.*)|*"
-                        };
-
-                        if (dialog.ShowDialog() == true)
-                        {
-                            File.WriteAllText(dialog.FileName, data);
-                            title = dialog.FileName;
-                        }
-                    }
-                    string newTitle = utils.fileName(title);
+                    string data = (tabItem.Content as TextBox).Text.ToString();
+                    string newTitle = utils.fileName(fileAction.save(i,data));
                     tabItem.Header = newTitle;
                 }
             }
@@ -185,9 +126,7 @@ namespace Notepad_Plus_Plus
             int index = TextTabs.SelectedIndex;
             if (index != -1)
             {
-                TabItem tabItem = TextTabs.Items[index] as TabItem;
-                var data = (tabItem.Content as TextBox).Text;
-                filePath.RemoveAt(index);
+                fileAction.closeFile(index);
                 TextTabs.Items.RemoveAt(index);
             }
             else
@@ -222,7 +161,6 @@ namespace Notepad_Plus_Plus
             {
                 title = title + "*";
                 tabItem.Header = title;
-
             }
             edit.Content = textBox.Text;
         }

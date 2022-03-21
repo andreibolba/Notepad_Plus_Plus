@@ -33,7 +33,7 @@ namespace Notepad_Plus_Plus
             InitializeComponent();
             this.textBox = text;
             this.mainWindow = main;
-            this.position = -1;
+            this.position = 0;
         }
 
         public void goToLine(MainWindow main,TextBox text)
