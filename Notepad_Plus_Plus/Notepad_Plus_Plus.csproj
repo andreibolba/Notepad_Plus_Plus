@@ -63,6 +63,7 @@
       <DependentUpon>Author.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\Edit.cs" />
+    <Compile Include="Classes\FileAction.cs" />
     <Compile Include="Classes\Utils.cs" />
     <Compile Include="Find.xaml.cs">
       <DependentUpon>Find.xaml</DependentUpon>

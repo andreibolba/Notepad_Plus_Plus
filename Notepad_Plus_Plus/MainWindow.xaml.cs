@@ -25,6 +25,7 @@ namespace Notepad_Plus_Plus
             filePath = new List<string>();
             edit = new Edit();
             utils = new Utils();
+            
         }
 
         private void initialize()
@@ -51,6 +52,7 @@ namespace Notepad_Plus_Plus
             count++;
             tabItem.Content = textBox;
             filePath.Add(null);
+            TextTabs.Items.Add(tabItem);
         }
         private void OpenFile(object sender, RoutedEventArgs e)
         {
@@ -206,7 +208,7 @@ namespace Notepad_Plus_Plus
             caretPosition = textBox.SelectionStart;
             edit.setSelectionChange(textBox.Text, text, caretPosition);
         }
-        private void Content_TextChanged(object sender, TextChangedEventArgs e)
+        public void Content_TextChanged(object sender, TextChangedEventArgs e)
         {
             var tabItem = TextTabs.SelectedItem as TabItem;
             var data = (tabItem.Content as TextBox).Text;
